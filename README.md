@@ -1,32 +1,39 @@
 # Universal LangChain Agent
 
-Этот проект демонстрирует работу простого CLI‑агента на базе LangChain. 
-Агент можно расширять новыми инструментами и интеграциями (REST API, файловая система и т.д.).
+Этот проект демонстрирует работу простого агента на базе LangChain.
+Агент расширяем и предоставляет CLI и HTTP API.
 
 ## Требования
 
 - Python 3.11+
-- Наличие переменной окружения `OPENAI_API_KEY` для доступа к ChatOpenAI
+- Переменная окружения `OPENAI_API_KEY` для доступа к ChatOpenAI
 
 Установите зависимости:
 
 ```bash
-pip install langchain langchain-openai langchain-community duckduckgo-search \
-    langchain-experimental requests
+pip install langchain langchain-openai langchain-community \
+    langchain-experimental requests fastapi uvicorn
 ```
 
-## Запуск
+## Запуск CLI
 
 ```bash
 python universal_agent.py
 ```
 
-После запуска появится приглашение для ввода запросов. Введите текст и агент ответит, 
-используя доступные инструменты. Для выхода введите `exit` или `quit`.
+Для выхода введите `exit` или `quit`.
+
+## Запуск API
+
+```bash
+python universal_agent.py --api
+```
+
+HTTP сервер будет запущен на `http://127.0.0.1:8000`. POST запрос на `/chat`
+принимает JSON вида `{"input": "ваш вопрос"}` и возвращает ответ агента.
 
 ## Встроенные инструменты
 
-- **Веб‑поиск** через DuckDuckGo
 - **Калькулятор** для математических выражений
 - **Приветствие** (пример пользовательской функции)
 - **REST API**: GET‑запрос по URL
@@ -35,6 +42,5 @@ python universal_agent.py
 
 ## Расширение
 
-Добавляйте свои инструменты с помощью декоратора `@tool` из LangChain и
-подключайте их в список `tools` внутри `universal_agent.py`.
-
+Добавляйте свои инструменты в модуле `agentlib/tools.py` и
+подключайте их при сборке агента.
