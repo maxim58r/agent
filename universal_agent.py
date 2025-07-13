@@ -6,7 +6,7 @@
 установлены зависимости:
 
 ```
-pip install langchain langchain-openai langchain-community duckduckgo-search \
+pip install langchain langchain-openai langchain-community \
     langchain-experimental requests
 ```
 
@@ -14,15 +14,15 @@ pip install langchain langchain-openai langchain-community duckduckgo-search \
 
 from __future__ import annotations
 
-import os
 from typing import List
+
+from langchain import hub
 
 import requests
 
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain.tools import tool
-from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_experimental.tools.python.tool import PythonREPLTool
 
 
@@ -66,8 +66,9 @@ def read_file(path: str) -> str:
 def build_agent(tools: List) -> AgentExecutor:
     """Создает и возвращает LangChain агент с заданными инструментами."""
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-    prompt = create_react_agent(llm, tools)
-    return AgentExecutor(agent=prompt, tools=tools, verbose=True)
+    prompt = hub.pull("hwchase17/react")
+    agent = create_react_agent(llm, tools, prompt)
+    return AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 
 def run_cli(agent: AgentExecutor) -> None:
@@ -86,10 +87,8 @@ def run_cli(agent: AgentExecutor) -> None:
 
 if __name__ == "__main__":
     # Регистрируем инструменты
-    search_tool = DuckDuckGoSearchRun()
     python_repl = PythonREPLTool()
     tools = [
-        search_tool,
         calculate,
         greet,
         call_api,

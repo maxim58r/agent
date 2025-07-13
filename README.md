@@ -11,7 +11,7 @@
 Установите зависимости:
 
 ```bash
-pip install langchain langchain-openai langchain-community duckduckgo-search \
+pip install langchain langchain-openai langchain-community \
     langchain-experimental requests
 ```
 
@@ -26,7 +26,6 @@ python universal_agent.py
 
 ## Встроенные инструменты
 
-- **Веб‑поиск** через DuckDuckGo
 - **Калькулятор** для математических выражений
 - **Приветствие** (пример пользовательской функции)
 - **REST API**: GET‑запрос по URL
